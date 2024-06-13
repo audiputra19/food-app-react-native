@@ -1,5 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity, ListRenderItem, Image } from 'react-native'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { Product } from '../../../interfaces/products';
 import { COLORS } from '../../../themes/variables/colors';
 import axios from 'axios';
@@ -10,16 +10,67 @@ import { RootStackParamList } from '../../../navigators/Main';
 import Styles from './styles';
 import LoveButton from '../../loveButton';
 import { useTheme } from '../../../hooks/themeContext';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faShoppingBag } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import CartButton from '../../cartButton';
+import { addToCart, removeFromCart } from '../../../store/cart';
 
 type ProductListScreenProp = StackNavigationProp<RootStackParamList, 'Home'>
 interface Props {
   data: Product[];
+  visible: (data: boolean) => void;
+  message: (data: string) => void;
 }
-const Populer: FC<Props> = ({data}) => {
+const Populer: FC<Props> = ({data, visible, message}) => {
     const {theme} = useTheme();    
     const navigation = useNavigation<ProductListScreenProp>();
+    const dispatch = useDispatch();
+    const prodCart = useSelector((state: RootState) => state.cart.items)
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     const renderItem:ListRenderItem<Product> = ({item}) => {
+      const isInCart = prodCart.some(cartItem => cartItem.id === item.id);
+
+      const handleVisibility = () => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        visible(false);
+        timeoutRef.current = setTimeout(() => {
+          visible(true);
+          timeoutRef.current = setTimeout(() => {
+            visible(false);
+          }, 3000);
+        }, 100); 
+      };
+
+      const handleAddCart = () => {
+        const now = new Date();
+        const newProduct = [
+            {
+                id: item.id,
+                img: item.img,
+                title: item.title,
+                price: item.price,
+                disc: item.disc,
+                category: item.category,
+                qty: 1,
+                date: now
+            }
+        ];
+
+        dispatch(addToCart(newProduct))
+        message('Saved to cart')
+        handleVisibility();
+      }
+
+      const handleRemoveCart =(id:number) => {
+        dispatch(removeFromCart(id));
+        message('Remove to cart')
+        handleVisibility();
+      }
 
       const pricedisc = item.price * (item.disc/100);
       const totaldisc = item.price - pricedisc;
@@ -51,7 +102,13 @@ const Populer: FC<Props> = ({data}) => {
                   <Text style={Styles.category}>{item.category}</Text>
                   <View style={Styles.footCard}>
                     <Disc/>
-                    <LoveButton/>
+                    <TouchableOpacity
+                      onPress={isInCart ? () => handleRemoveCart(item.id) : handleAddCart}
+                    >
+                      <CartButton
+                        color={isInCart ? COLORS.yellow : theme.colorDefault}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>

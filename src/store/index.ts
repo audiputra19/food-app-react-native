@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import cartSlice from './cart';
 import darkModeSlice from './theme';
+import historySlice from './history';
 import { MMKV } from 'react-native-mmkv';
 
 export const storage = new MMKV();
@@ -23,7 +24,8 @@ export const reduxStorage = {
 
 const rootReducer = combineReducers({
     cart: cartSlice,
-    darkMode: darkModeSlice
+    darkMode: darkModeSlice,
+    history: historySlice
 })
 
 const persistConfig = {

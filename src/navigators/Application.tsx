@@ -15,7 +15,11 @@ const Application: FC = () => {
                 translucent
                 backgroundColor="transparent"
             />
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Navigator 
+                screenOptions={{ 
+                    headerShown: false 
+                }}
+            >
                 <Stack.Screen 
                     name='Main'
                     component={Main}

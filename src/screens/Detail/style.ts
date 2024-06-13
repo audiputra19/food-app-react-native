@@ -55,7 +55,44 @@ const Styles = StyleSheet.create({
         fontFamily: FONTWEIGHT.bold,
         marginLeft: 10,
         color: COLORS.white
-    }
+    },
+    headerBar: {
+        position: 'absolute',
+        zIndex: 1,
+        width: "100%",
+        paddingTop: 45,
+        paddingHorizontal: 15,
+        paddingBottom: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    btnBack: {
+        backgroundColor: COLORS.white,
+        padding: 14,
+        borderRadius: 15
+    },
+    btnCart: {
+        padding: 12,
+        borderRadius: 15 
+    },
+    cartWrap: {
+        position: 'absolute',
+        backgroundColor: COLORS.red,
+        alignSelf: 'flex-end',
+        marginTop: -9,
+        zIndex: 1,
+        paddingHorizontal: 5,
+        borderRadius: 6,
+    },
+    cartLengthTxt: {
+        color: COLORS.white,
+        fontSize: 11,
+        fontFamily: FONTWEIGHT.bold    
+    },
+    btnRightWrap: {
+        flexDirection: 'row',
+    },
 })
 
 export default Styles

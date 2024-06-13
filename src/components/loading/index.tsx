@@ -30,10 +30,12 @@ const Loading = () => {
     });
 
     return (
-        <View style={[Styles.loading,{backgroundColor:theme.backgroundColor}]}>
-            <Animated.View style={{ transform: [{ rotate: spin }] }}>
-            <FontAwesomeIcon icon={faSpinner} size={40} color={COLORS.amber} />
-            </Animated.View>  
+        <View style={Styles.container}>
+            <View style={[Styles.loading,{backgroundColor:theme.backgroundColor}]}>
+                <Animated.View style={{ transform: [{ rotate: spin }] }}>
+                <FontAwesomeIcon icon={faSpinner} size={40} color={COLORS.amber} />
+                </Animated.View>  
+            </View>
         </View>
     )
 }

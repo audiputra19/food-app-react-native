@@ -8,10 +8,11 @@ const width: number = windowSize.width;
 const Styles = StyleSheet.create({
     container: {
        height: "100%",
-       padding: 15
+       paddingHorizontal: 15
     },
     subContainer: {
-        marginBottom: 245
+        marginBottom: 245,
+        paddingVertical: 15
     },
     titleCart: {
         fontSize: FONTS.xxxl,

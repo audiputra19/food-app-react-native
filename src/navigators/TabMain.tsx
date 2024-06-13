@@ -10,6 +10,7 @@ import Cart from '../screens/CartItems';
 import LoveItems from '../screens/LoveItems';
 import { useNavigation } from '@react-navigation/native';
 import HistoryItems from '../screens/HistoryItems';
+import ProfilePage from '../screens/Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,30 +53,7 @@ const TabMain: FC = () => {
                 tabBarIcon: ({color}) => (
                     <FontAwesomeIcon icon={faHeart} size={22} color={color} />
                 ),
-                headerStyle:{
-                    height: 120,
-                    backgroundColor: theme.backgroundColor
-                },
-                headerShown:true,
-                headerTransparent: true,
-                headerTitle: '',
-                headerLeft: () => (
-                    <TouchableOpacity
-                        onPress={() => navigation.goBack()}
-                    >
-                        <View 
-                            style={{ 
-                                marginTop:15,
-                                marginLeft:15,
-                                padding:14, 
-                                backgroundColor:COLORS.white,
-                                borderRadius:15 
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faChevronLeft} size={18} />
-                        </View>
-                    </TouchableOpacity>
-                )
+                headerShown: false
             }}
         />
         <Tab.Screen  
@@ -85,39 +63,17 @@ const TabMain: FC = () => {
                 tabBarIcon: ({color}) => (
                     <FontAwesomeIcon icon={faBoxArchive} size={22} color={color} />
                 ),
-                headerStyle:{
-                    height: 120,
-                    backgroundColor: theme.backgroundColor
-                },
-                headerShown:true,
-                headerTransparent: true,
-                headerTitle: '',
-                headerLeft: () => (
-                    <TouchableOpacity
-                        onPress={() => navigation.goBack()}
-                    >
-                        <View 
-                            style={{ 
-                                marginTop:15,
-                                marginLeft:15,
-                                padding:14, 
-                                backgroundColor:COLORS.white,
-                                borderRadius:15 
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faChevronLeft} size={18} />
-                        </View>
-                    </TouchableOpacity>
-                )
+                headerShown: false
             }}
         />
         <Tab.Screen  
             name='Profile'
-            component={Home}
+            component={ProfilePage}
             options={{
                 tabBarIcon: ({color}) => (
                     <FontAwesomeIcon icon={faUser} size={22} color={color} />
-                )
+                ),
+                headerShown: false
             }}
         />
     </Tab.Navigator>

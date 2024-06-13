@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import TabMain from './TabMain';
-import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
+import { CardStyleInterpolators, StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/Home';
 import DetailProduct from '../screens/Detail';
 import { TouchableOpacity, View } from 'react-native';
@@ -14,12 +14,27 @@ import CartItems from '../screens/CartItems';
 import { useTheme } from '../hooks/themeContext';
 import { useDispatch } from 'react-redux';
 import { clearCart } from '../store/cart';
+import SearchPage from '../screens/SearchPage';
+import HistoryItems from '../screens/HistoryItems';
+import ResultSearch from '../screens/ResultSearch';
+
+type TabParamList = {
+  Home: undefined;
+  Love: undefined;
+  History: undefined;
+  Profile: undefined;
+};
 
 export type RootStackParamList = {
-  TabMain: undefined;
+  TabMain: {
+    screen: keyof TabParamList;
+    params?: TabParamList[keyof TabParamList];
+  } | undefined;
   Home: undefined;
   Detail: { itemId: number };
   Cart: { showModal: boolean };
+  SearchPage: { keyword: string } | undefined;
+  ResultSearch: { keyword: string }
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -31,7 +46,10 @@ const Main: FC = () => {
   return (
     <>
       <Stack.Navigator 
-        screenOptions={{ headerShown: false }
+        screenOptions={{ 
+          headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS 
+        }
       }>
           <Stack.Screen 
             name='TabMain'
@@ -44,38 +62,19 @@ const Main: FC = () => {
           <Stack.Screen
             name='Detail'
             component={DetailProduct}
-            options={{ 
-              headerShown:true,
-              headerTransparent: true,
-              headerTitle: '',
-              headerLeft: () => (
-                <TouchableOpacity
-                  onPress={() => navigation.goBack()}
-                >
-                  <View 
-                    style={{ 
-                      marginTop:15,
-                      marginLeft:15,
-                      padding:14, 
-                      backgroundColor:COLORS.white,
-                      borderRadius:15 
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faChevronLeft} size={18} />
-                  </View>
-                </TouchableOpacity>
-              ),
-              headerRight: () => (
-                <TouchableOpacity>
-                  <View
-                    style={{ 
-                      marginTop:15,
-                      marginRight:15
-                    }}>
-                    <FontAwesomeIcon icon={faHeart} size={30} color={COLORS.red} />
-                  </View>
-                </TouchableOpacity>
-              )
+          />
+          <Stack.Screen
+            name='SearchPage'
+            component={SearchPage}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forNoAnimation
+            }}
+          />
+          <Stack.Screen
+            name='ResultSearch'
+            component={ResultSearch}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forNoAnimation
             }}
           />
           <Stack.Screen
@@ -102,7 +101,7 @@ const Main: FC = () => {
                       borderRadius:15 
                     }}
                   >
-                    <FontAwesomeIcon icon={faChevronLeft} size={18} />
+                    <FontAwesomeIcon icon={faChevronLeft} size={20} />
                   </View>
                 </TouchableOpacity>
               ),

@@ -17,12 +17,12 @@ const useApi = (itemId?: number) => {
     const fetchData = async () => {
       try {
         const response = await axios.get<FirebaseData>(
-          'https://firebasestorage.googleapis.com/v0/b/shopping-app-74a94.appspot.com/o/dbshopfood.json?alt=media&token=cd98a441-1ca6-4eed-89a2-cc9227b0b76d'
+          'https://firebasestorage.googleapis.com/v0/b/shopping-app-74a94.appspot.com/o/dbshopfood.json?alt=media&token=6228919d-c778-4e44-93eb-f5df05a73044'
         );
         const dataList = response.data;
         //console.log(dataList); // Log the data to check the structure
 
-        if (itemId !== undefined) {
+        if (itemId) {
           // Find the product by ID
           const item = dataList.product.find(item => item.id === itemId);
           if (item) {

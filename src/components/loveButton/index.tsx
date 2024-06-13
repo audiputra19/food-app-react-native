@@ -4,9 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../themes/variables/colors";
+import { useTheme } from "../../hooks/themeContext";
 
 const LoveButton = () => {
     const [loved, setLoved] = useState(false);
+    const {theme} = useTheme();
 
     const toggleLove = () => {
         setLoved(!loved);
@@ -14,13 +16,11 @@ const LoveButton = () => {
 
     return (
         <View>
-          <TouchableOpacity onPress={toggleLove}>
             <FontAwesomeIcon
               icon={loved ? faHeart : faHeartRegular}
               size={20}
-              color={loved ? COLORS.red : COLORS.gray}
+              color={loved ? COLORS.red : COLORS.slateDark}
             />
-          </TouchableOpacity>
         </View>
     );
 }

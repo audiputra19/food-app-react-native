@@ -6,6 +6,7 @@ const Styles = StyleSheet.create({
     title: {
         fontSize:FONTS.xxxl,
         fontFamily: FONTWEIGHT.bold,
+        marginRight: 15
     },
     flexTitle: {
         flexDirection: 'row',
@@ -20,10 +21,10 @@ const Styles = StyleSheet.create({
     },
     decreases: {
         borderRadius: 30,
-        padding: 15,
+        padding: 10,
     },
     increase: {
-        padding: 15,
+        padding: 10,
     },
     number: {
         width: 35,

@@ -1,10 +1,14 @@
 import { View, Text, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Styles from './style'
 import { COLORS } from '../../../themes/variables/colors'
 import { useTheme } from '../../../hooks/themeContext'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../store'
+import { addToHistory } from '../../../store/history'
+import { v4 as uuidv4 } from 'uuid'
+import { clearCart } from '../../../store/cart'
+import Alert from '../../alert'
 
 const { width } = Dimensions.get('window');
 const DOT_SIZE = 3;
@@ -14,6 +18,32 @@ const PurchaseBar = () => {
   const {theme} = useTheme();  
   const totalPrice = useSelector((state: RootState) => state.cart.totalPrice);
   const numberOfDots = Math.floor(width / (DOT_SIZE + DOT_SPACING));
+  const dispatch = useDispatch();
+  const prod = useSelector((state: RootState) => state.cart.items);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showMessage, setShowMessage] = useState('');
+
+  const handleAddHistory = () => {
+    const now = new Date();
+    const randomID = Math.random().toString(36).substr(2, 9);
+    const newProduct = {
+        id: randomID,
+        value: prod,
+        date: now
+    }
+
+    dispatch(addToHistory(newProduct));
+    dispatch(clearCart());
+    setShowAlert(true);
+    setShowMessage('Transaction successful');
+    setTimeout(() => {
+        setShowAlert(false);
+    }, 3000);
+  }
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
 
   return (
     <View style={[Styles.sticky, {backgroundColor:theme.backgroundTab}]}>
@@ -37,12 +67,19 @@ const PurchaseBar = () => {
             </View>
         </View>
         <View style={Styles.subContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={handleAddHistory}
+            >
                 <View style={Styles.checkoutBtn}>
                     <Text style={Styles.checkoutTxt}>Checkout</Text>
                 </View>
             </TouchableOpacity>    
         </View>
+        <Alert 
+            message={showMessage} 
+            visible={showAlert}
+            onClose={handleCloseAlert} 
+        />
     </View>
   )
 }

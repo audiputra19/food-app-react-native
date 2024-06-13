@@ -87,7 +87,7 @@ const TopInformation: FC<Props> = ({ data, qty, increase, decrease, review }) =>
             </View>
             <View>
                 <Text style={[Styles.descTxt, {color:theme.colorDefault}]}>Description</Text>
-                <ReadMoreComponent text={data.desc} maxLength={100} />
+                <ReadMoreComponent text={data.desc} maxLength={200} />
             </View>
         </View>
     )

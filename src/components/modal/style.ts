@@ -59,7 +59,31 @@ const Styles = StyleSheet.create({
         color: COLORS.slateDark,
         fontSize: FONTS.lg,
         fontFamily: FONTWEIGHT.semibold
-    }
+    },
+    container: {
+        ...StyleSheet.absoluteFillObject,
+        justifyContent: 'flex-end',
+      },
+      overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        zIndex: 1, 
+      },
+      modal: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#fff',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        padding: 20,
+        zIndex: 2,
+      },
+      closeButton: {
+        marginTop: 10,
+        alignItems: 'center',
+      },
 })
 
 export default Styles

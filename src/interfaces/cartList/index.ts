@@ -6,5 +6,5 @@ export interface CartItem {
     disc: number;
     category: string;
     qty: number,
-    date: string
+    date: Date
 }

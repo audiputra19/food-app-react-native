@@ -10,6 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '../../../navigators/Main'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../store'
+import SearchBar from '../../searchBar'
 
 type ProductListScreenProp = StackNavigationProp<RootStackParamList, 'Home'>
 const Welcome: FC = () => {
@@ -21,13 +22,17 @@ const Welcome: FC = () => {
     <View style={Styles.container}>
       <View>
         <View style={Styles.flex}>
-            <TouchableOpacity style={{ flex:1 }}>
-              <View style={Styles.search}>
-                <FontAwesomeIcon icon={faSearch} size={16}/>
-                <Text style={Styles.placeholder}>Search Product</Text>
-              </View>
+            <TouchableOpacity 
+              style={{ flex:1 }}
+              onPress={() => navigation.navigate(`SearchPage`)}
+            >
+              <SearchBar 
+                placeholder="Search Product"
+                editable={false} 
+                focus={false}
+              />
             </TouchableOpacity>
-            <View style={{ marginLeft: 12 }}>
+            <View style={{ marginHorizontal: 12 }}>
               <TouchableOpacity 
                 onPress={toggleTheme}
               >
@@ -36,17 +41,18 @@ const Welcome: FC = () => {
             </View>
             <View>
               <TouchableOpacity
-                style={{ paddingLeft:12, paddingRight:6 }}
                 onPress={() => navigation.navigate('Cart', { showModal: false })}
               >
-                {
-                  cartItem.length !== 0 ? (
-                    <View style={Styles.cartWrap}>
-                      <Text style={Styles.cartTxt}>{cartItem.length}</Text>
-                    </View>
-                  ) : null
-                }
-                <FontAwesomeIcon icon={faCartShopping} size={23} color={theme.colorDefault} />
+                <View style={{ width:28 }}>
+                  {
+                    cartItem.length !== 0 ? (
+                      <View style={Styles.cartWrap}>
+                        <Text style={Styles.cartTxt}>{cartItem.length}</Text>
+                      </View>
+                    ) : null
+                  }
+                  <FontAwesomeIcon icon={faCartShopping} size={23} color={theme.colorDefault} />
+                </View>
               </TouchableOpacity>
             </View>
         </View>

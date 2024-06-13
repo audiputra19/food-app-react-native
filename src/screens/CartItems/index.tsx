@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { COLORS } from '../../themes/variables/colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import { CartItem } from '../../interfaces/carList'
+import { CartItem } from '../../interfaces/cartList'
 import Styles from './style'
 import { useTheme } from '../../hooks/themeContext'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -23,16 +23,16 @@ const CartItems = () => {
   const {theme} = useTheme();
   const [isLoading, setIsLoading] = useState(true);
 
+  const filteredProd = prod.slice().sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  })
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
-    });
+    }, 500);
     return () => clearTimeout(timer);
   })
-
-  if (isLoading) {
-      return <Loading />;
-  }
 
   const showProduct = (item:CartItem, i:number) => {
 
@@ -113,37 +113,41 @@ const CartItems = () => {
   }
 
   return (
-    <>
-        <View style={[Styles.container, {backgroundColor:theme.backgroundColor}]}>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-            >
-              <View style={Styles.subContainer}>
-                <View>
-                  <Text style={[Styles.titleCart, {color:theme.colorDefault}]}>My Cart List</Text>
+    isLoading ? (
+      <Loading/>
+    ) : (
+      <>
+          <View style={[Styles.container, {backgroundColor:theme.backgroundColor}]}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+              >
+                <View style={Styles.subContainer}>
+                  <View>
+                    <Text style={[Styles.titleCart, {color:theme.colorDefault}]}>My Cart List</Text>
+                  </View>
+                  <View style={Styles.prodListWrap}>
+                    {prod.length === 0 
+                    ? (
+                        <View style={Styles.noItemWrap}>
+                          <Text style={[Styles.noItemTxt, {color:theme.colorTxt}]}>No Items</Text>
+                        </View>
+                      ) 
+                    : (filteredProd.map(showProduct))}
+                  </View>
                 </View>
-                <View style={Styles.prodListWrap}>
-                  {prod.length === 0 
-                  ? (
-                      <View style={Styles.noItemWrap}>
-                        <Text style={[Styles.noItemTxt, {color:theme.colorTxt}]}>No Items</Text>
-                      </View>
-                    ) 
-                  : (prod.map(showProduct))}
-                </View>
-              </View>
-            </ScrollView>
-        </View>
-        <View>
-          <PurchaseBar/>
-        </View>
-        <View>
-          <ModalDialog 
-            title='Comfirm Removal'
-            dialog='Are you sure you want to remove all items?'
-          />
-        </View>
-    </>
+              </ScrollView>
+          </View>
+          <View>
+            <PurchaseBar/>
+          </View>
+          <View>
+            <ModalDialog 
+              title='Comfirm Removal'
+              dialog='Are you sure you want to remove all items?'
+            />
+          </View>
+      </>
+    )
 
   )
 }

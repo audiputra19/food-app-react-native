@@ -1,4 +1,5 @@
 export interface Product {
+    map(renderItem: () => void): import("react").ReactNode;
     product: any;
     id: number;
     img: string;

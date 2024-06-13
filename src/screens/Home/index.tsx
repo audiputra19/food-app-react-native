@@ -1,28 +1,22 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
 import { Animated, Easing, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Styles from './style';
 import Welcome from '../../components/home/welcome';
 import Categories from '../../components/home/categories';
 import Populer from '../../components/home/populer';
-import { RootStackParamList } from '../../navigators/Main';
 import useApi from '../../hooks/useApi';
-import { useNavigation } from '@react-navigation/native';
 import Discover from '../../components/home/discover';
 import { useTheme } from '../../hooks/themeContext';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { COLORS } from '../../themes/variables/colors';
 import Loading from '../../components/loading';
+import Alert from '../../components/alert';
 
-const Stack = createStackNavigator();
-type ProductListScreenProp = StackNavigationProp<RootStackParamList, 'Home'>;
 const Home: FC = () => {
   const { data, loading, error } = useApi();
   const { theme } = useTheme();
-  const navigation = useNavigation<ProductListScreenProp>();
   const [selectedCategory, setSelectedCategory] = useState<string | null>('');
-
+  const [showAlert, setShowAlert] = useState(false);
+  const [showMessage, setShowMessage] = useState('');
+  
   if (!data || !Array.isArray(data)) {
     return (
       <Loading />
@@ -38,10 +32,24 @@ const Home: FC = () => {
 
   let getPopularItems = [...selectedCategory !== '' ? data.filter(item => item.category === selectedCategory) : data]
         .sort((a, b) => b.sold - a.sold)
-        .slice(0, 10);
+        .slice(0, 5);
+
+  let otherItems = filteredData.filter(item => !getPopularItems.includes(item));      
 
   const handleCategorySelection = (category: string | null) => {
     setSelectedCategory(category);
+  };
+
+  const handleAlert = (data: boolean) => {
+    setShowAlert(data);
+  }
+
+  const handleMessage = (data: string) => {
+    setShowMessage(data)
+  }
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
   };
 
   return (
@@ -62,14 +70,33 @@ const Home: FC = () => {
                 />
               );
             case 'Populer':
-              return <Populer data={getPopularItems} />;
+              return (
+                <Populer 
+                  data={getPopularItems} 
+                  visible={handleAlert}
+                  message={handleMessage}  
+                />
+              ) 
             case 'Discover':
-              return <Discover data={filteredData} />;
+              return (
+                <Discover 
+                  data={otherItems} 
+                  visible={handleAlert}
+                  message={handleMessage}
+                />
+              )
             default:
               return null;
           }
         }}
         keyExtractor={(item) => item.key}
+      />
+      <Alert 
+        message={showMessage} 
+        visible={showAlert}
+        onClose={handleCloseAlert}
+        marginBottom={75}
+        marginHorizontal={15}
       />
     </View>
   )
