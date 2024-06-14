@@ -10,7 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '../../../navigators/Main'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../store'
-import SearchBar from '../../searchBar'
+import SearchBar from '../../search/searchBar'
 
 type ProductListScreenProp = StackNavigationProp<RootStackParamList, 'Home'>
 const Welcome: FC = () => {
@@ -23,6 +23,7 @@ const Welcome: FC = () => {
       <View>
         <View style={Styles.flex}>
             <TouchableOpacity 
+              activeOpacity={1}
               style={{ flex:1 }}
               onPress={() => navigation.navigate(`SearchPage`)}
             >
@@ -32,18 +33,18 @@ const Welcome: FC = () => {
                 focus={false}
               />
             </TouchableOpacity>
-            <View style={{ marginHorizontal: 12 }}>
-              <TouchableOpacity 
-                onPress={toggleTheme}
-              >
-                <FontAwesomeIcon icon={theme.colorDefault === COLORS.slateDark ? faMoon : faSun} size={23} color={theme.colorDefault} />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity 
+              onPress={toggleTheme}
+            >
+              <View style={{ padding: 6, marginLeft:6 }}>
+                  <FontAwesomeIcon icon={theme.colorDefault === COLORS.slateDark ? faMoon : faSun} size={23} color={theme.colorDefault} />
+              </View>
+            </TouchableOpacity>
             <View>
               <TouchableOpacity
                 onPress={() => navigation.navigate('Cart', { showModal: false })}
               >
-                <View style={{ width:28 }}>
+                <View style={{ padding: 6}}>
                   {
                     cartItem.length !== 0 ? (
                       <View style={Styles.cartWrap}>

@@ -21,7 +21,7 @@ const Styles = StyleSheet.create({
         borderTopRightRadius: 20
     },
     mainCard: {
-        padding: 15,
+        paddingTop: 15,
         width: 170
     },
     textPop: {
@@ -34,23 +34,26 @@ const Styles = StyleSheet.create({
     title: {
         color:COLORS.slateDark,
         fontFamily: FONTWEIGHT.bold,
-        fontSize: FONTS.lg
+        fontSize: FONTS.lg,
+        paddingHorizontal: 15
     },
     category: {
         color: COLORS.gray,
         fontFamily: FONTWEIGHT.bold,
         paddingVertical: 5,
+        paddingHorizontal: 15
     },
     price: {
         color: COLORS.slateDark,
         fontFamily: FONTWEIGHT.bold,
         fontSize: FONTS.lg,
-        marginTop: 5
     },
     footCard: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingLeft: 15,
+        paddingBottom: 5
     }
 })
 

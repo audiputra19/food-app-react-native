@@ -3,8 +3,8 @@ import React, { FC, ForwardRefRenderFunction, ForwardedRef, forwardRef, useEffec
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCircleXmark, faSearch } from '@fortawesome/free-solid-svg-icons'
 import Styles from './style'
-import { COLORS } from '../../themes/variables/colors'
-import { useTheme } from '../../hooks/themeContext'
+import { COLORS } from '../../../themes/variables/colors'
+import { useTheme } from '../../../hooks/themeContext'
 
 interface Props {
     placeholder: string;

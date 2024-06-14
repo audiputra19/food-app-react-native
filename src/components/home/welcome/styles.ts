@@ -28,7 +28,7 @@ const Styles = StyleSheet.create({
         position: 'absolute',
         backgroundColor: COLORS.red,
         alignSelf: 'flex-end',
-        marginTop: -9,
+        marginTop: -2,
         zIndex: 999,
         paddingHorizontal: 5,
         borderRadius: 6

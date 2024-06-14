@@ -1,22 +1,24 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity, Keyboard } from 'react-native';
+import { View, TextInput, FlatList, Text, TouchableOpacity, Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Product } from '../../interfaces/products';
-import useApi from '../../hooks/useApi';
-import Loading from '../loading';
+import { Product } from '../../../interfaces/products';
+import useApi from '../../../hooks/useApi';
+import Loading from '../../loading';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../navigators/Main';
-import { useTheme } from '../../hooks/themeContext';
+import { RootStackParamList } from '../../../navigators/Main';
+import { useTheme } from '../../../hooks/themeContext';
+import Styles from './style';
 
 interface AutoCompleteProps {
   inputRef: React.RefObject<TextInput>;
   query: string;
   onSuggestClick: (value: string) => void;
+  handleSearchHistory: (value: string) => void;
 }
 
 type searchNavigationProps = StackNavigationProp<RootStackParamList, 'ResultSearch'>
-const AutoComplete: FC<AutoCompleteProps> = ({ inputRef, query, onSuggestClick }) => {
+const AutoComplete: FC<AutoCompleteProps> = ({ inputRef, query, onSuggestClick, handleSearchHistory }) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const { data, loading, error } = useApi();
@@ -62,19 +64,19 @@ const AutoComplete: FC<AutoCompleteProps> = ({ inputRef, query, onSuggestClick }
   }, [query, data]);
 
   return (
-    <View style={styles.container}>
+    <View style={Styles.container}>
       {suggestions.length > 0 && (
         <FlatList
           data={suggestions}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
             <TouchableOpacity 
-                style={[styles.suggestionContainer, {borderColor:theme.colorTxt}]}
-                onPress={() => navigation.navigate('ResultSearch', {keyword: item})}
+                style={[Styles.suggestionContainer, {borderColor:theme.colorTxt}]}
+                onPress={() => handleSearchHistory(item)}
             >
-              <View style={styles.suggestionContent}>
+              <View style={Styles.suggestionContent}>
                 <Icon name="search" size={20} color={theme.colorDefault} />
-                <Text style={[styles.suggestionText, {color:theme.colorDefault}]}>{item}</Text>
+                <Text style={[Styles.suggestionText, {color:theme.colorDefault}]}>{item}</Text>
               </View>
               <TouchableOpacity onPress={() => onSuggestClick(item)}>
                 <Icon name="keyboard-o" size={20} color={theme.colorDefault} />
@@ -86,26 +88,5 @@ const AutoComplete: FC<AutoCompleteProps> = ({ inputRef, query, onSuggestClick }
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 5
-  },
-  suggestionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 13,
-  },
-  suggestionContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  suggestionText: {
-    marginLeft: 10,
-    fontWeight: 'bold',
-  },
-});
 
 export default AutoComplete;

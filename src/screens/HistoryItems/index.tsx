@@ -8,12 +8,12 @@ import { clearHistory } from '../../store/history'
 import { HistoryList } from '../../interfaces/historyList'
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import SearchBar from '../../components/searchBar'
 import Loading from '../../components/loading'
 import { addToCart } from '../../store/cart'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackParamList } from '../../navigators/Main'
 import { StackNavigationProp } from '@react-navigation/stack';
+import SearchBar from '../../components/search/searchBar'
 
 type HistoryNavigationProps = StackNavigationProp<RootStackParamList, 'Cart'> 
 const HistoryItems = () => {

@@ -3,7 +3,6 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 import Styles from './style'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft, faStar } from '@fortawesome/free-solid-svg-icons'
-import SearchBar from '../../components/searchBar'
 import { useTheme } from '../../hooks/themeContext'
 import { RouteProp, useNavigation } from '@react-navigation/native'
 import { RootStackParamList } from '../../navigators/Main'
@@ -17,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import Alert from '../../components/alert'
 import { addToCart, removeFromCart } from '../../store/cart'
+import SearchBar from '../../components/search/searchBar'
 
 type searchResultRouteProp = RouteProp<RootStackParamList, 'ResultSearch'>
 type searchResultNavigationProp = StackNavigationProp<RootStackParamList, 'ResultSearch'>
@@ -96,7 +96,7 @@ const ResultSearch: FC<Props> = ({ route }) => {
 
     const handleRemoveCart =(id:number) => {
       dispatch(removeFromCart(id));
-      setShowMessage('Remove to cart')
+      setShowMessage('Remove from cart')
       handleVisibility();
     }
 
@@ -167,6 +167,7 @@ const ResultSearch: FC<Props> = ({ route }) => {
           </View>
           <View style={{ flex: 1 }}>
             <TouchableOpacity
+              activeOpacity={1}
               onPress={() => navigation.navigate('SearchPage', { keyword: keyword })}
             >
               <SearchBar
@@ -187,7 +188,7 @@ const ResultSearch: FC<Props> = ({ route }) => {
                 data={filteredData}
                 keyExtractor={item => item.id.toString()}
                 renderItem={renderItem}
-                style={{  }} />
+              />
             </View>
           )
         }

@@ -22,7 +22,7 @@ const Styles = StyleSheet.create({
         borderTopRightRadius: 20
     },
     mainCard: {
-        padding: 15,
+        paddingTop: 15,
         width: '100%'
     },
     textDiscover: {
@@ -34,24 +34,29 @@ const Styles = StyleSheet.create({
     title: {
         color: COLORS.slateDark,
         fontFamily: FONTWEIGHT.bold,
-        fontSize: FONTS.lg
+        fontSize: FONTS.lg,
+        paddingHorizontal: 15
     },
     category: {
         color: COLORS.gray,
         fontFamily: FONTWEIGHT.bold,
         paddingVertical: 5,
+        paddingHorizontal: 15,
     },
     price: {
         color: COLORS.slateDark,
         fontFamily: FONTWEIGHT.bold,
         fontSize: FONTS.lg,
-        marginTop: 5
+        marginTop: 5,
+        paddingHorizontal: 15
     },
     footCard: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 10
+        marginTop: 5,
+        marginLeft: 15,
+        marginBottom: 5
     },
     priceWrap: {
         flexDirection: 'row',

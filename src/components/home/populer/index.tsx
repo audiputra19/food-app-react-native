@@ -68,7 +68,7 @@ const Populer: FC<Props> = ({data, visible, message}) => {
 
       const handleRemoveCart =(id:number) => {
         dispatch(removeFromCart(id));
-        message('Remove to cart')
+        message('Remove from cart')
         handleVisibility();
       }
 
@@ -105,9 +105,11 @@ const Populer: FC<Props> = ({data, visible, message}) => {
                     <TouchableOpacity
                       onPress={isInCart ? () => handleRemoveCart(item.id) : handleAddCart}
                     >
-                      <CartButton
-                        color={isInCart ? COLORS.yellow : theme.colorDefault}
-                      />
+                      <View style={{ padding: 10, marginRight: 5 }}>
+                        <CartButton
+                          color={isInCart ? COLORS.yellow : theme.colorDefault}
+                        />
+                      </View>
                     </TouchableOpacity>
                   </View>
                 </View>

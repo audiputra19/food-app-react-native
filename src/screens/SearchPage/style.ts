@@ -5,22 +5,22 @@ const Styles = StyleSheet.create({
        height: "100%"
     },
     subContainer: {
-        paddingTop: 45,
-        paddingHorizontal: 15
+        paddingTop: 40,
     },
     searchWrap: {
         flexDirection: 'row',
         alignItems: 'center'
     },
     backWrap: {
-        marginRight: 15
+        padding: 15,
     },
     search: {
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
         paddingHorizontal: 12,
-        borderRadius: 18
+        borderRadius: 18,
+        marginRight: 15,
     },
     textInput: {
         flex: 1,

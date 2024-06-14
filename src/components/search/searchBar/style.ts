@@ -1,6 +1,4 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../themes/variables/colors";
-import { FONTS, FONTWEIGHT } from "../../themes/variables/fonts";
 
 const Styles = StyleSheet.create({
     search: {

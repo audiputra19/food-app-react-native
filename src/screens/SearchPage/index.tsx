@@ -3,13 +3,15 @@ import React, { useState, useRef, FC, useEffect, useCallback } from 'react';
 import Styles from './style';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft, faCircleXmark, faSearch } from '@fortawesome/free-solid-svg-icons';
-import AutoComplete from '../../components/searchBar/autoComplete';
+import AutoComplete from '../../components/search/autoComplete';
 import { useTheme } from '../../hooks/themeContext';
 import { RouteProp, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { COLORS } from '../../themes/variables/colors';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../navigators/Main';
 import Loading from '../../components/loading';
+import { getSearchHistory, saveSearchHistory } from '../../utils/storage/historySearch';
+import SearchHistory from '../../components/search/searchHistory';
 
 type searchPageRouteProp = RouteProp<RootStackParamList, 'SearchPage'>
 type searchPageNavigationProp = StackNavigationProp<RootStackParamList, 'SearchPage'>
@@ -23,6 +25,16 @@ const SearchPage: FC<Props> = ({ route }) => {
   const navigation = useNavigation<searchPageNavigationProp>();
   const inputRef = useRef<TextInput>(null);
   const [query, setQuery] = useState('');
+  const [history, setHistory] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadHistory = async () => {
+      const savedHistory = await getSearchHistory();
+      setHistory(savedHistory);
+    };
+
+    loadHistory();
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -50,8 +62,14 @@ const SearchPage: FC<Props> = ({ route }) => {
     }
   };
 
-  const handleKeyPress = () => {
-      navigation.navigate('ResultSearch', {keyword: query})
+  const handleKeyPress = async () => {
+    let updatedHistory = [query, ...history.filter(item => item !== query)];
+    if (updatedHistory.length > 5) {
+      updatedHistory = updatedHistory.slice(0, 5);
+    }
+    setHistory(updatedHistory);
+    await saveSearchHistory(updatedHistory);
+    navigation.navigate('ResultSearch', {keyword: query})
   };
 
   const handleClearKeyword = () => {
@@ -61,15 +79,38 @@ const SearchPage: FC<Props> = ({ route }) => {
     }
   }
 
+  const handleSearchHistory = async (value: string) => {
+    //if(value.trim().length === 0) return;
+
+    let updatedHistory = [value, ...history.filter(item => item !== value)];
+    if (updatedHistory.length > 5) {
+      updatedHistory = updatedHistory.slice(0, 5);
+    }
+    setHistory(updatedHistory);
+    await saveSearchHistory(updatedHistory);
+    navigation.navigate('ResultSearch', { keyword: value });
+  }
+
+  const handleRemoveFromHistory = async (value: string) => {
+    const updatedHistory = history.filter(item => item !== value);
+    setHistory(updatedHistory)
+    await saveSearchHistory(updatedHistory)
+  }
+
+  const handleClearHistory = async () => {
+    setHistory([]);
+    await saveSearchHistory([]);
+};
+
   return (
     <View style={[Styles.container, { backgroundColor: theme.backgroundColor }]}>
       <View style={Styles.subContainer}>
         <View style={Styles.searchWrap}>
-          <View style={Styles.backWrap}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <FontAwesomeIcon icon={faArrowLeft} size={20} color={theme.colorDefault} />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <View style={Styles.backWrap}>
+                <FontAwesomeIcon icon={faArrowLeft} size={20} color={theme.colorDefault} />
+            </View>
+          </TouchableOpacity>
           <View style={{ flex: 1 }}>
             <View style={[Styles.search, { borderColor: COLORS.gray }]}>
               <FontAwesomeIcon icon={faSearch} size={16} color={theme.colorDefault} />
@@ -97,7 +138,23 @@ const SearchPage: FC<Props> = ({ route }) => {
           </View>
         </View>
       </View>
-      <AutoComplete inputRef={inputRef} query={query} onSuggestClick={handleSuggestClick}/>
+      {
+        query!=='' ? (
+          <AutoComplete 
+            inputRef={inputRef} 
+            query={query} 
+            onSuggestClick={handleSuggestClick} 
+            handleSearchHistory={handleSearchHistory}
+          />
+        ) : (
+          <SearchHistory 
+            history={history}
+            removeFromHistory={handleRemoveFromHistory}
+            clearHistory={handleClearHistory}
+          />
+          
+        )
+      }
     </View>
   );
 };
